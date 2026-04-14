@@ -20,8 +20,8 @@ int main(int argc, char *argv[]){
     }
 
     for(int i=2;i<=5; i++){
-        if(!isNumer(argv[i])){
-            std::cerr <<"Error | el"<<i<<"debe ser numero entero"<<std::endl;
+        if(!isNumber(argv[i])){
+            std::cerr <<"Error | el "<<i<<" debe ser numero entero"<<std::endl;
             return 1;
         }
     }

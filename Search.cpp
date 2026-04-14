@@ -47,17 +47,23 @@ std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> s
     //stores possible directions
     std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
 
-    bool visited[map.h][map.w]{false};      //we'll just use a matrix og booleans to indicated if visited
+    bool visited[map.h][map.w];      //we'll just use a matrix og booleans to indicated if visited
+    for(int i=0; i<map.h;i++){
+        for(int j=0;j<map.w;j++){
+            visited[i][j]=false;
+        }
+    }
     std::queue<std::pair<int,int>> OPEN;
     std::unordered_map<std::pair<int,int>,std::pair<int,int>> pathCache;    ////hashmap to reconstruct path: child -> parent
 
     //add firts node to open list
-
+    OPEN.push(start);
     while(!OPEN.empty()){
         //get node
-
+        auto pos = OPEN.front();
+        OPEN.pop();
         //check if node is goal
-		/*if(pos==goal){
+		if(pos==goal){
 			auto endTime = std::chrono::high_resolution_clock::now();
 			int count=0;
             for(int i=0;i<map.h;i++){
@@ -69,18 +75,26 @@ std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> s
 			std::cout<<"OPEN: "<<OPEN.size()<<std::endl;
 			std::cout<<"FOUND in "<<(endTime-startTime).count()/1000000.0<<"ms\n";
 			return reconstruct(pathCache,pos);
-		}*/
+		}
 
 		for(auto dir:dirs){
 			//copy the position
-
+            auto child =pos;
             //then move it
-            
+            child.first += dir.first;
+            child.second+= dir.second;
             //if illegal or visited, skip it
-            
+            if(child.first <0 || child.first >=map.h || child.second < 0 || child.second >= map.w){
+                continue;
+            }
+            if(map._map[child.first][child.second]==1||visited[child.first][child.second]){
+                continue;
+            }
             //add child to open list
-
+            OPEN.push(child);
+            visited[child.first][child.second]=true;
             //register path
+            pathCache[child]=pos;
 		}
 	}
 	std::cout<<"NOT FOUND!!!!\n";

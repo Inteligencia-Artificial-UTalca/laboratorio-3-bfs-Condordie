@@ -17,10 +17,8 @@ Map::Map(std::string filename){
     _map.resize(h, std::vector<int>(w));
 
     for(int i=0; i<h;i++){
-        std::string row;
-        file >> row;
-        for(int j=0; j<w;i++){
-            _map[i][j]= row[j] - '0';
+        for(int j=0; j<w;j++){
+            file>>_map[i][j];
         }
     }
     file.close();
