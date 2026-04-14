@@ -122,3 +122,54 @@ std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> s
 float Search::Heuristic(std::pair<int,int> start,std::pair<int,int> goal){
     return std::abs(start.first -goal.first) + std::abs(start.second - goal.second);
 }
+std::vector<std::pair<int,int>> Search::Greedy(const Map& map, std::pair<int,int> start,std::pair<int,int> goal){
+    std::cout <<"==================================\nRunning Greedy...\n";
+    auto startTime= std::chrono::high_resolution_clock::now();
+    std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
+    
+    bool visited[map.h][map.w];
+    for(int i=0;i<map.h;i++){
+        for(int j=0;j<map.w;j++){
+            visited[i][j]=false;
+        }
+    }
+    std::priority_queue<std::pair<int,int>, std::vector<std::pair<int,int>>,CompareHeuristic>OPEN{CompareHeuristic(goal)};
+    std::unordered_map<std::pair<int,int>,std::pair<int,int>> pathCache;
+    OPEN.push(start);
+    visited[start.first][start.second]=true;
+    pathCache[start]=start;
+    while(!OPEN.empty()){
+        auto pos = OPEN.top();
+        OPEN.pop();
+        if(pos==goal){
+            auto endTime = std::chrono::high_resolution_clock::now();
+            int count =0;
+            for( int i =0; i<map.h;i++){
+                for(int j=0;j<map.w;j++){
+                    if(visited[i][j]) count ++;
+                }
+            }
+            std::cout<<"Visited: "<<count<<std::endl;
+            std::cout<<"OPEN: "<<OPEN.size()<<std::endl;
+            std::cout<<"FOUND in"<<(endTime-startTime).count()/1000000.0<<"ms\n";
+            return reconstruct(pathCache,pos);
+        }
+        for(auto dir:dirs){
+            auto child = pos;
+            child.first += dir.first;
+            child.second+= dir.second;
+
+            if(child.first<0|| child.first>=map.h||child.second<0||child.second>=map.w) continue;
+            if(map._map[child.first][child.second]==1||visited[child.first][child.second])continue;
+
+            OPEN.push(child);
+            visited[child.first][child.second]=true;
+            pathCache[child]=pos;
+        }
+    }
+    std::cout<<"NOT FOUND!!!!\n";
+    std::vector<std::pair<int,int>>path;
+    path.push_back(start);
+    path.push_back(goal);
+    return path;
+}
