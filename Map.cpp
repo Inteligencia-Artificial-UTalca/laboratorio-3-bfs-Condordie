@@ -12,6 +12,18 @@ Map::Map(std::string filename){
     //Resize map
     //Save file information in map
     //Close file
+    std::ifstream file(filename);
+    file>>h>>w;
+    _map.resize(h, std::vector<int>(w));
+
+    for(int i=0; i<h;i++){
+        std::string row;
+        file >> row;
+        for(int j=0; j<w;i++){
+            _map[i][j]= row[j] - '0';
+        }
+    }
+    file.close();
 }   
 
 Map::Map(const Map& rhs):h(rhs.h),w(rhs.w),_map(rhs._map){
