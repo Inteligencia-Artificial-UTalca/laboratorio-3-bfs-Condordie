@@ -35,15 +35,16 @@ int main(int argc, char *argv[]){
 
     if(x1 <0 || x1 >=map.getH()|| y1 <0||y1 >=map.getW()|| x2 <0 || x2 >=map.getH()|| y2 <0||y2 >=map.getW()){
         std::cerr<<"Error:coordenadas fuera del amapa"<<std::endl;
+        return 1;
     }
 
     auto path = Search::BFS(map,{atoi(argv[2]),atoi(argv[3])},{atoi(argv[4]),atoi(argv[5])}); 
     //Calculate path distance
     //Print path distance
-    std::cout<<"Distancia: "<<path.size() - 1<<std::endl;
+    std::cout<<"Dist: "<<path.size() - 1<<std::endl;
     colorMap.print(path);
     auto pathGreedy = Search::Greedy(map,{x1,y1},{x2,y2});
-    std:: cout <<"Distancia: "<<pathGreedy.size()-1<< std::endl;
+    std:: cout <<"Dist: "<<pathGreedy.size()-1<< std::endl;
     colorMap.print(pathGreedy);
     return 0;
 }
