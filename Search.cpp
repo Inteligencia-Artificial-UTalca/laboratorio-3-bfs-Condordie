@@ -20,6 +20,15 @@ namespace std
 		}
 	};
 }
+struct CompareHeuristic{
+    std::pair<int,int> goal;
+    CompareHeuristic(std::pair<int,int> goal): goal(goal){}
+    bool operator()(const std::pair<int,int>& a, const std::pair<int,int>& b ) const {
+        float ha =std::abs(a.first-goal.first) + std::abs(a.second-goal.second);
+        float hb =std::abs(b.first-goal.first) + std::abs(b.second-goal.second);
+        return ha >hb;
+    }
+};
 
 std::vector<std::pair<int,int>> Search::reconstruct(const std::unordered_map<std::pair<int,int>,std::pair<int,int>> &pathCache, const std::pair<int,int> &start){
 	std::deque<std::pair<int,int>> nodes;
