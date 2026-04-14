@@ -42,6 +42,6 @@ int main(int argc, char *argv[]){
     
     //Calculate path distance
     //Print path distance
-    
+    std::cout<<"Distancia: "<<path.size() - 1<<std::endl;
     return 0;
 }
