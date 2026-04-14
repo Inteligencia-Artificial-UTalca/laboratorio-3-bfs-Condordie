@@ -42,5 +42,8 @@ int main(int argc, char *argv[]){
     //Print path distance
     std::cout<<"Distancia: "<<path.size() - 1<<std::endl;
     colorMap.print(path);
+    auto pathGreedy = Search::Greedy(map,{x1,y1},{x2,y2});
+    std:: cout <<"Distancia: "<<pathGreedy.size()-1<< std::endl;
+    colorMap.print(pathGreedy);
     return 0;
 }
