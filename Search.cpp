@@ -28,9 +28,12 @@ std::vector<std::pair<int,int>> Search::reconstruct(const std::unordered_map<std
     //traverse path from goal to start
 
     //
-	//while(true){
-        //implement
-	//}
+	while(true){
+        nodes.push_front(node);
+        auto it = pathCache.find(node);
+        if(it==pathCache.end() || it->second==node) break;
+        node = it->second;
+	}
 
     //revert path and return it
     std::vector<std::pair<int,int>> vec;
@@ -58,6 +61,8 @@ std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> s
 
     //add firts node to open list
     OPEN.push(start);
+    visited[start.first][start.second]=true;
+    pathCache[start]= start;
     while(!OPEN.empty()){
         //get node
         auto pos = OPEN.front();
