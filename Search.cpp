@@ -110,3 +110,6 @@ std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> s
     path.push_back(goal);
     return path;
 }
+float Search::Heuristic(std::pair<int,int> start,std::pair<int,int> goal){
+    return std::abs(start.first -goal.first) + std::abs(start.second - goal.second);
+}
