@@ -173,3 +173,11 @@ std::vector<std::pair<int,int>> Search::Greedy(const Map& map, std::pair<int,int
     path.push_back(goal);
     return path;
 }
+std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int> start, std::pair<int,int> goal){
+    std::cout<<"============================\nRunning A*...\n";
+    auto startTime= std::chrono::high_resolution_clock::now();
+    std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
+    std::unordered_map<std::pair<int,int>,float> gCost;
+    gCost[start]=0;
+    return{};
+}
