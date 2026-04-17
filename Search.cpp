@@ -195,5 +195,46 @@ std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int>
     //Nodos por ecplorar | Nodos ya explorados 'close'
     std::unordered_map<std::pair<int,int>, std::pair<int,int>> pathCache;
     std::unordered_map<std::pair<int,int>, bool> CLOSED;
+    pathCache[start]=start;
+
+    std::priority_queue<std::pair<int,int>, std::vector<std::pair<int,int>>,CompareAstar>OPEN{CompareAstar(goal,gCost)};
+    OPEN.push(start);
+    while(!OPEN.empty()){
+        auto pos = OPEN.top();
+        OPEN.pop();
+
+        if(CLOSED[pos]) continue;
+        CLOSED[pos]= true;
+
+        if(pos == goal){
+            auto endTime = std::chrono::high_resolution_clock::now();
+            int count = 0;
+            for(auto& c : CLOSED) if(c.second) count++;
+            std::cout<<"VISITED: "<<count<<std::endl;
+            std::cout<<"OPEN: "<<OPEN.size()<<std::endl;
+            std::cout<<"FOUND in "<<(endTime- startTime).count()/1000000.0<<"ms\n";
+            return reconstruct(pathCache,pos);
+        }
+        for( auto dir : dirs){
+            auto child = pos;
+            child.first += dir.first;
+            child.second+= dir.second;
+            if(child.first <0 || child.first >= map.h || child.second<0 || child.second>=map.h) continue;
+            if(map._map[child.first][child.second]==1)continue;
+            if(CLOSED[child])continue;
+            //coste g del hijo = coste g del papa +1
+            float newG = gCost[pos]+1;
+            //si no tiene coste o hay uno mejor
+            if(gCost.find(child)== gCost.end() || newG < gCost[child]){
+                gCost[child] = newG;
+                pathCache[child] = pos;
+                OPEN.push(child);
+            } 
+        }
+    }
+    std::cout<<"NOT FOUND!!!\n";
+    std::vector<std::pair<int,int>> path;
+    path.push_back(start);
+    path.push_back(goal);
     return{};
 }
