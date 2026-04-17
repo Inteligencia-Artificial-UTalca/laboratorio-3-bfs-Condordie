@@ -37,14 +37,20 @@ int main(int argc, char *argv[]){
         std::cerr<<"Error:coordenadas fuera del amapa"<<std::endl;
         return 1;
     }
-
+    // Forma BFS
     auto path = Search::BFS(map,{atoi(argv[2]),atoi(argv[3])},{atoi(argv[4]),atoi(argv[5])}); 
     //Calculate path distance
     //Print path distance
     std::cout<<"Dist: "<<path.size() - 1<<std::endl;
     colorMap.print(path);
+    // Forma Greedy
     auto pathGreedy = Search::Greedy(map,{x1,y1},{x2,y2});
     std:: cout <<"Dist: "<<pathGreedy.size()-1<< std::endl;
     colorMap.print(pathGreedy);
+    // Forma Astar
+    auto pathAstar = Search::Astar(map,{x1,y1},{x2,y2});
+    std:: cout<<"Dist: "<<pathAstar.size() - 1<<std::endl;
+    colorMap.print(pathAstar);
+
     return 0;
 }
