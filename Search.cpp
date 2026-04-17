@@ -29,6 +29,18 @@ struct CompareHeuristic{
         return ha >hb;
     }
 };
+struct CompareAstar{
+    std::pair<int,int> goal;
+    const std::unordered_map<std::pair<int,int>,float>& gCost;
+    CompareAstar(std::pair<int,int> goal, const std::unordered_map<std::pair<int,int>,float>& gCost) : goal(goal), gCost(gCost){}
+    bool operator()(const std::pair<int,int>& a, const std::pair<int,int>& b) const{
+        float ha= std::abs(a.first-goal.first)+ std::abs(a.second -goal.second);
+        float hb= std::abs(b.first - goal.first) + std::abs(b.second - goal.second);
+        float fa = gCost.at(a) + ha; //f = g + h
+        float fb = gCost.at(b) + hb;
+        return fa< fb;//f mayor = menor prioridad
+    }
+};
 
 std::vector<std::pair<int,int>> Search::reconstruct(const std::unordered_map<std::pair<int,int>,std::pair<int,int>> &pathCache, const std::pair<int,int> &start){
 	std::deque<std::pair<int,int>> nodes;
