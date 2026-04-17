@@ -177,7 +177,11 @@ std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int>
     std::cout<<"============================\nRunning A*...\n";
     auto startTime= std::chrono::high_resolution_clock::now();
     std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
+    //Guardar el coste de cada Nodo
     std::unordered_map<std::pair<int,int>,float> gCost;
     gCost[start]=0;
+    //Nodos por ecplorar | Nodos ya explorados 'close'
+    std::unordered_map<std::pair<int,int>, std::pair<int,int>> pathCache;
+    std::unordered_map<std::pair<int,int>, bool> CLOSED;
     return{};
 }
