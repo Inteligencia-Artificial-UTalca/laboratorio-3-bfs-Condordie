@@ -69,7 +69,7 @@ std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> s
 	auto startTime = std::chrono::high_resolution_clock::now();
 
     //stores possible directions
-    std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
+    std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1},{-1,-1},{-1,1},{1,-1},{1,1}}; // 8 directions
 
     bool visited[map.h][map.w];      //we'll just use a matrix og booleans to indicated if visited
     for(int i=0; i<map.h;i++){
@@ -137,7 +137,7 @@ float Search::Heuristic(std::pair<int,int> start,std::pair<int,int> goal){
 std::vector<std::pair<int,int>> Search::Greedy(const Map& map, std::pair<int,int> start,std::pair<int,int> goal){
     std::cout <<"==================================\nRunning Greedy...\n";
     auto startTime= std::chrono::high_resolution_clock::now();
-    std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
+    std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1},{-1,-1},{-1,1},{1,-1},{1,1}}; //8 directions
     
     bool visited[map.h][map.w];
     for(int i=0;i<map.h;i++){
@@ -188,7 +188,9 @@ std::vector<std::pair<int,int>> Search::Greedy(const Map& map, std::pair<int,int
 std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int> start, std::pair<int,int> goal){
     std::cout<<"============================\nRunning A*...\n";
     auto startTime= std::chrono::high_resolution_clock::now();
-    std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
+    // 4 directions std::pair<int,int> dirs[]{{-1,0},{0,1},{1,0},{0,-1}};
+    // 8 directions
+    std::pair<std::pair<int,int>,float> dirs[]{{{-1,0},1.0f},{{0,1},1.0f},{{1,0},1.0f},{{0,-1},1.0f},{{-1,-1},1.41f},{{-1,1},1.41f},{{1,-1},1.41f},{{1,1},1.41f}};
     //Guardar el coste de cada Nodo
     std::unordered_map<std::pair<int,int>,float> gCost;
     gCost[start]=0;
@@ -215,7 +217,7 @@ std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int>
             std::cout<<"FOUND in "<<(endTime- startTime).count()/1000000.0<<"ms\n";
             return reconstruct(pathCache,pos);
         }
-        for( auto dir : dirs){
+        for( auto [dir,cost] : dirs){
             auto child = pos;
             child.first += dir.first;
             child.second+= dir.second;
@@ -223,7 +225,7 @@ std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int>
             if(map._map[child.first][child.second]==1)continue;
             if(CLOSED[child])continue;
             //coste g del hijo = coste g del papa +1
-            float newG = gCost[pos]+1;
+            float newG = gCost[pos]+ cost;
             //si no tiene coste o hay uno mejor
             if(gCost.find(child)== gCost.end() || newG < gCost[child]){
                 gCost[child] = newG;
