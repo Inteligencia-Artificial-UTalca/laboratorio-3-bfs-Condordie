@@ -58,7 +58,6 @@ struct CompareWAstar{
         return fa<fb;
     }
 };
-
 std::vector<std::pair<int,int>> Search::reconstruct(const std::unordered_map<std::pair<int,int>,std::pair<int,int>> &pathCache, const std::pair<int,int> &start){
 	std::deque<std::pair<int,int>> nodes;
 	auto node = start;//make copy
@@ -80,7 +79,6 @@ std::vector<std::pair<int,int>> Search::reconstruct(const std::unordered_map<std
     }
     return vec;
 }
-
 std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> start, std::pair<int,int> goal){
     std::cout<<"===========================\nRunning BFS...\n";
 	auto startTime = std::chrono::high_resolution_clock::now();
