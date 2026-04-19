@@ -34,10 +34,12 @@ struct CompareAstar{
     const std::unordered_map<std::pair<int,int>,float>& gCost;
     CompareAstar(std::pair<int,int> goal, const std::unordered_map<std::pair<int,int>,float>& gCost) : goal(goal), gCost(gCost){}
     bool operator()(const std::pair<int,int>& a, const std::pair<int,int>& b) const{
-        float ha= std::abs(a.first-goal.first)+ std::abs(a.second -goal.second);
+        float ha= std::abs(a.first - goal.first) + std::abs(a.second -goal.second);
         float hb= std::abs(b.first - goal.first) + std::abs(b.second - goal.second);
-        float fa = gCost.at(a) + ha; //f = g + h
-        float fb = gCost.at(b) + hb;
+        float ga = gCost.count(a) ? gCost.at(a) : std::numeric_limits<float>::infinity();
+        float gb = gCost.count(b) ? gCost.at(b) : std::numeric_limits<float>::infinity();
+        float fa = ga + ha; //f = g + h
+        float fb = gb + hb;
         return fa< fb;//f mayor = menor prioridad
     }
 };
@@ -49,8 +51,10 @@ struct CompareWAstar{
     bool operator()(const std::pair<int,int>& a, const std::pair<int,int>& b) const{
         float ha= std::abs(a.first - goal.first) + std::abs(a.second - goal.second);
         float hb= std::abs(b.first - goal.first) + std::abs(b.second - goal.second);
-        float fa= gCost.at(a) + w * ha; // f= g + w * h
-        float fb= gCost.at(b) + w * hb;
+        float ga = gCost.count(a) ? gCost.at(a) : std::numeric_limits<float>::infinity();
+        float gb = gCost.count(b) ? gCost.at(b) : std::numeric_limits<float>::infinity();
+        float fa= ga + w * ha; // f= g + w * h
+        float fb= gb + w * hb;
         return fa<fb;
     }
 };
@@ -174,7 +178,7 @@ std::vector<std::pair<int,int>> Search::Greedy(const Map& map, std::pair<int,int
                     if(visited[i][j]) count ++;
                 }
             }
-            std::cout<<"Visited: "<<count<<std::endl;
+            std::cout<<"VISITED: "<<count<<std::endl;
             std::cout<<"OPEN: "<<OPEN.size()<<std::endl;
             std::cout<<"FOUND in"<<(endTime-startTime).count()/1000000.0<<"ms\n";
             return reconstruct(pathCache,pos);

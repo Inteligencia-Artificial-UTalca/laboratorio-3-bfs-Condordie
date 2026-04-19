@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
     int y1=atoi(argv[3]),y2=atoi(argv[5]);
 
     if(x1 <0 || x1 >=map.getH()|| y1 <0||y1 >=map.getW()|| x2 <0 || x2 >=map.getH()|| y2 <0||y2 >=map.getW()){
-        std::cerr<<"Error:coordenadas fuera del amapa"<<std::endl;
+        std::cerr<<"Error:coordenadas fuera del mapa"<<std::endl;
         return 1;
     }
     // Forma BFS
