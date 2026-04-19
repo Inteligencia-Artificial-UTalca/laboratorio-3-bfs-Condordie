@@ -39,7 +39,6 @@ Map& Map::operator=(const Map& rhs){
     _map=rhs._map;
     return *this;
 }
-   
 void Map::print() const{
     for(int i=0;i<h;i++){
         for(int j=0;j<w;j++){

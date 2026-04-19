@@ -219,7 +219,7 @@ std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int>
             auto child = pos;
             child.first += dir.first;
             child.second+= dir.second;
-            if(child.first <0 || child.first >= map.h || child.second<0 || child.second>=map.h) continue;
+            if(child.first <0 || child.first >= map.h || child.second<0 || child.second>=map.w) continue;
             if(map._map[child.first][child.second]==1)continue;
             if(CLOSED[child])continue;
             //coste g del hijo = coste g del papa +1
