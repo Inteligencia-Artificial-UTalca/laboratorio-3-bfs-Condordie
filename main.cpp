@@ -51,6 +51,10 @@ int main(int argc, char *argv[]){
     auto pathAstar = Search::Astar(map,{x1,y1},{x2,y2});
     std:: cout<<"Dist: "<<pathAstar.size() - 1<<std::endl;
     colorMap.print(pathAstar);
+    //Forma WAstar
+    auto pathWAstar = Search::WAstar(map,{x1,y1},{x2,y2},1.5f);
+    std::cout<<"Disr: "<<pathWAstar.size()-1<<std::endl;
+    colorMap.print(pathWAstar);
 
     return 0;
 }

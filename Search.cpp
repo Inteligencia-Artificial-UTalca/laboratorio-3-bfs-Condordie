@@ -41,6 +41,19 @@ struct CompareAstar{
         return fa< fb;//f mayor = menor prioridad
     }
 };
+struct CompareWAstar{
+    std::pair<int,int> goal;
+    const std::unordered_map<std::pair<int,int>,float>& gCost;
+    float w;
+    CompareWAstar(std::pair<int,int> goal, const std::unordered_map<std::pair<int,int>,float>& gCost,float w) : goal(goal),gCost(gCost),w(w){}
+    bool operator()(const std::pair<int,int>& a, const std::pair<int,int>& b) const{
+        float ha= std::abs(a.first - goal.first) + std::abs(a.second - goal.second);
+        float hb= std::abs(b.first - goal.first) + std::abs(b.second - goal.second);
+        float fa= gCost.at(a) + w * ha; // f= g + w * h
+        float fb= gCost.at(b) + w * hb;
+        return fa<fb;
+    }
+};
 
 std::vector<std::pair<int,int>> Search::reconstruct(const std::unordered_map<std::pair<int,int>,std::pair<int,int>> &pathCache, const std::pair<int,int> &start){
 	std::deque<std::pair<int,int>> nodes;
@@ -239,4 +252,54 @@ std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int>
     path.push_back(start);
     path.push_back(goal);
     return{};
+}
+std::vector<std::pair<int,int>> Search::WAstar(const Map& map,std::pair<int,int> start, std::pair<int,int> goal,float w){
+    std::cout<<"=======================\nRunning WAstar (w= "<<w<<")...\n";
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    std::pair<std::pair<int,int>, float> dirs[]{{{-1,0},1.0f},{{0,1},1.0f},{{1,0},1.0f},{{0,-1},1.0f},{{-1,-1},1.41f},{{-1,1},1.41f},{{1,-1},1.41f},{{1,1},1.41f}};
+    std::unordered_map<std::pair<int,int>,float> gCost;
+    gCost[start]=0;
+    std::unordered_map<std::pair<int,int>, std::pair<int,int>> pathCache;
+    std::unordered_map<std::pair<int,int>,bool> CLOSED;
+    pathCache[start] = start;
+    
+    std::priority_queue<std::pair<int,int>, std::vector<std::pair<int,int>>,CompareWAstar> OPEN{CompareWAstar(goal,gCost,w)};
+    OPEN.push(start);
+    while(!OPEN.empty()){
+        auto pos= OPEN.top();
+        OPEN.pop();
+
+        if(CLOSED[pos])continue;
+        CLOSED[pos] = true;
+        if(pos == goal){
+            auto endTime = std::chrono::high_resolution_clock::now();
+            int count =0;
+            for(auto& c : CLOSED) if(c.second) count++;
+            std::cout<<"VISITED: "<<count<<std::endl;
+            std::cout<<"OPEN: "<<OPEN.size()<<std::endl;
+            std::cout<<"FOUND in "<<(endTime-startTime).count()/1000000.0<<"ms\n";
+            return reconstruct(pathCache,pos);
+        }
+        for(auto[dir,cost]: dirs){
+            auto child = pos;
+            child.first += dir.first;
+            child.second+= dir.second;
+
+            if(child.first<0|| child.first>=map.h||child.second<0||child.second>=map.w)continue;
+            if(map._map[child.first][child.second]==1) continue;
+            if(CLOSED[child])continue;
+            float newG = gCost[pos] + cost;
+            if(gCost.find(child)==gCost.end()|| newG < gCost[child]){
+                gCost[child]= newG;
+                pathCache[child]=pos;
+                OPEN.push(child);
+            }
+        }
+    }
+    std::cout<<"NOT FOUND!!!\n";
+    std::vector<std::pair<int,int>> path;
+    path.push_back(start);
+    path.push_back(goal);
+    return path;
 }
