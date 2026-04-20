@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== MAPA MEDIUM==="
+echo "MAPA MEDIUM"
 for  i in $(seq 1 30)
 do
     echo "---Corrida $i ---"
