@@ -7,6 +7,7 @@ class Map{
 protected:
     int h;
     int w;
+    bool isHeightMap;
     std::vector<std::vector<int>> _map;
 
 public:
@@ -20,6 +21,7 @@ public:
     void print(std::vector<std::pair<int,int>>) const; //prints map and path 
     int getH() const{return h;}
     int getW() const{return w;}
+    bool getIsHeightMap() const{return isHeightMap;}
     friend bool operator==(const Map& lhs, const Map& rhs); //declares global operator friend 
     friend class Search;                //to access protected members. Otherwise, need accessors.
 };

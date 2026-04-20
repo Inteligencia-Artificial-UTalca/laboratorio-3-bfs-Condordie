@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-Map::Map():h(0),w(0){
+Map::Map():h(0),w(0),isHeightMap(false){
 
 }
 
@@ -22,6 +22,17 @@ Map::Map(std::string filename){
         }
     }
     file.close();
+    //revisar si es mapa binario o no
+    isHeightMap = false;
+    for(int i=0;i<h;i++){
+        for(int j=0;j<w;j++){
+            if(_map[i][j]>1){
+                isHeightMap = true;
+                break;
+            }
+        }
+        if(isHeightMap) break;
+    }
 }   
 
 Map::Map(const Map& rhs):h(rhs.h),w(rhs.w),_map(rhs._map){
