@@ -236,11 +236,17 @@ std::vector<std::pair<int,int>> Search::Astar(const Map& map, std::pair<int,int>
             auto child = pos;
             child.first += dir.first;
             child.second+= dir.second;
+
             if(child.first <0 || child.first >= map.h || child.second<0 || child.second>=map.w) continue;
-            if(map._map[child.first][child.second]==1)continue;
+            if(!map.isHeightMap && map._map[child.first][child.second]==1)continue;
             if(CLOSED[child])continue;
+
+            float moveCost = cost;
+            if(map.isHeightMap){
+                moveCost += std::abs(map._map[child.first][child.second] - map._map[pos.first][pos.second]);
+            }
             //coste g del hijo = coste g del papa +1
-            float newG = gCost[pos]+ cost;
+            float newG = gCost[pos]+ moveCost;
             //si no tiene coste o hay uno mejor
             if(gCost.find(child)== gCost.end() || newG < gCost[child]){
                 gCost[child] = newG;
@@ -289,9 +295,15 @@ std::vector<std::pair<int,int>> Search::WAstar(const Map& map,std::pair<int,int>
             child.second+= dir.second;
 
             if(child.first<0|| child.first>=map.h||child.second<0||child.second>=map.w)continue;
-            if(map._map[child.first][child.second]==1) continue;
+            if(!map.isHeightMap && map._map[child.first][child.second]==1)continue;
             if(CLOSED[child])continue;
-            float newG = gCost[pos] + cost;
+
+            float moveCost = cost;
+            if(map.isHeightMap){
+                moveCost += std::abs(map._map[child.first][child.second] - map._map[pos.first][pos.second]);
+            }
+            
+            float newG = gCost[pos] + moveCost;
             if(gCost.find(child)==gCost.end()|| newG < gCost[child]){
                 gCost[child]= newG;
                 pathCache[child]=pos;
