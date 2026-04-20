@@ -128,7 +128,7 @@ std::vector<std::pair<int,int>> Search::BFS(const Map& map, std::pair<int,int> s
             if(child.first <0 || child.first >=map.h || child.second < 0 || child.second >= map.w){
                 continue;
             }
-            if(map._map[child.first][child.second]==1||visited[child.first][child.second]){
+            if((!map.isHeightMap && map._map[child.first][child.second]==1)||visited[child.first][child.second]){
                 continue;
             }
             //add child to open list
@@ -187,7 +187,7 @@ std::vector<std::pair<int,int>> Search::Greedy(const Map& map, std::pair<int,int
             child.second+= dir.second;
 
             if(child.first<0|| child.first>=map.h||child.second<0||child.second>=map.w) continue;
-            if(map._map[child.first][child.second]==1||visited[child.first][child.second])continue;
+            if((!map.isHeightMap && map._map[child.first][child.second]==1)||visited[child.first][child.second])continue;
 
             OPEN.push(child);
             visited[child.first][child.second]=true;
@@ -302,7 +302,7 @@ std::vector<std::pair<int,int>> Search::WAstar(const Map& map,std::pair<int,int>
             if(map.isHeightMap){
                 moveCost += std::abs(map._map[child.first][child.second] - map._map[pos.first][pos.second]);
             }
-            
+
             float newG = gCost[pos] + moveCost;
             if(gCost.find(child)==gCost.end()|| newG < gCost[child]){
                 gCost[child]= newG;
